@@ -21,6 +21,12 @@ class Song < ActiveRecord::Base
     self.artist = artist
   end
 
+  def note_contents
+    self.notes.map do |note|
+      note.content
+    end
+  end
+
   def note_contents=(notes)
     notes.each do |note|
       if note.length > 0
@@ -28,15 +34,9 @@ class Song < ActiveRecord::Base
       end
     end
   end
-
-  def note_contents
-    self.notes.map do |note|
-      note.content
-    end
-  end
-
-  def note_ids=(ids)
-    ids.each do |id|
+  
+  def note_ids=(note_ids)
+    note_ids.each do |id|
       id_num = id.chars.last.to_i
       note = Note.find_or_create_by(id: id_num)
       self.notes << note
